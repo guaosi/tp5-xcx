@@ -1,0 +1,64 @@
+<?php
+/**
+ * Create By guaosi
+ * Author guaosi
+ * Date: 2017/8/4/0004
+ * Time: 11:38
+ */
+
+namespace app\api\controller\v1;
+
+
+use app\api\service\WxNotify;
+use app\api\vailate\IdMustBeInt;
+use app\api\vailate\successPay;
+use think\Controller;
+use app\api\service\Pay as PayService;
+class Pay extends BaseController
+{
+    protected $beforeActionList=[
+        'needPrimaryScope'=>['only'=>'getPreOrder,redirectNotify']
+    ];
+//    传入订单的id号
+   public function getPreOrder($id='')
+   {
+       (new IdMustBeInt())->goCheck();
+        $payService=new PayService($id);
+        $preOrder=$payService->pay();
+        return $preOrder;
+   }
+   public function reviceNotify(){
+//      获得微信的异步通知信息(只有用户支付成功了，微信端才会发起异步回调请求)
+//       1.检查商品库存量  超卖
+//       2.更改订单状态
+//       3.减去库存量
+//       因为微信返回的是xml格式，所以要调用微信SDK里自带的方法，将其重构后使用
+//       线上请注释掉这两行代码以及redirectNotify函数，还有路由中的地址，启用下面的最后两行代码，因为这是
+//       用来xdebug调试模式使用的
+       $xmlData = file_get_contents('php://input');
+       $result = curl_post_raw('http:/z.cn/api/v1/pay/re_notify?XDEBUG_SESSION_START=13322',
+           $xmlData);
+       $notify=new WxNotify();
+////       调用这个方法会自动执行NotifyProcess
+//       $notify->Handle();
+   }
+    public function redirectNotify()
+    {
+        $notify = new WxNotify();
+        $notify->Handle();
+    }
+//    当有微信支付时，请屏蔽这个函数，非常危险！！！
+    public function successPay($id='',$formId='')
+    {
+        (new successPay())->goCheck();
+        $uid=\app\api\service\Token::getCurrentId();
+        if(\app\api\service\Pay::successPay($id,$uid,$formId))
+        {
+            $info=[
+                'result'=>true
+            ];
+            return json($info,202);
+        }
+    }
+
+}

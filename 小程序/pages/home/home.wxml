@@ -1,0 +1,34 @@
+<!--home.wxml-->
+<import src='../tpls/products/products-tpl.wxml' />
+<view class="container">
+
+  <swiper class='swiper' indicator-dots="true" autoplay="true" circular="true" >
+    <block wx:for="{{banner}}" wx:key='k' wx:for-item='item'>
+      <swiper-item  data-id="{{item.key_word}}" class='banner-item' catchtap="onProductItemsTap">
+        <image mode='aspectFill' src="{{item.img.url}}"></image>
+      </swiper-item>
+    </block>
+  </swiper>
+
+  <view class="home-main">
+    <view class="home-main-theme">
+      <view class="home-main-header">精选主题</view>
+      <view class="theme-box">
+        <block wx:for="{{theme}}" wx:key='index' wx:for-item='item'>
+          <view wx:if="{{index==2}}" class="theme-item big" catchtap="onThemeItemsTap" data-id="{{item.id}}"
+           data-description="{{item.description}}">
+            <image src="{{item.top_img.url}}"></image>
+          </view>
+          <view wx:else class="theme-item"  catchtap="onThemeItemsTap" data-id="{{item.id}}"
+           data-description="{{item.description}}">
+            <image src="{{item.top_img.url}}"></image>
+          </view>
+        </block>
+      </view>
+    </view>
+    <view class="home-main-products">
+      <view class="home-main-header">最近新品</view>
+       <template is="products" data="{{products:Products}}" />
+    </view>
+  </view>
+</view>

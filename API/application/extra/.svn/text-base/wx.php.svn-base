@@ -1,0 +1,13 @@
+<?php
+/**
+ * Create By guaosi
+ * Author guaosi
+ * Date: 2017/8/1/0001
+ * Time: 21:34
+ */
+return [
+    'appid'=>'wx1ac7ac6844c34c94',
+    'secret'=>'687000935926d771c30001cc5218239f',
+    'Login_url'=>'https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code',
+    'access_token_url'=>'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s'
+];

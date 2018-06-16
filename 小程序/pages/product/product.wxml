@@ -1,0 +1,75 @@
+<!--product.wxml-->
+<view class="container detail-container">
+  <view class="detail-header-box">
+
+    <view class="fixed-btns-box" catchtap="onCartTap">
+      <view class="fiexd-cart">
+        <image src="../../imgs/icon/cart@top.png"></image>
+        <view wx:if="{{cartCount>0}}">{{cartCount}}</view>
+      </view>
+
+    </view>
+
+    <view class="detail-topic-img">
+      <image src="{{product.main_img_url}}" mode="aspectFill"></image>
+    </view>
+
+    <view class="cart-box">
+      <view class="product-counts">
+        <picker range="{{countArray}}" value="0" bindchange="bindPickerChange" class="{{product.stock==0 ? 'disabled':''}}">
+          <view>
+            <text class="counts-tips">数量</text>
+            <text class="counts-data">{{productCount}}</text>
+            <image class="counts-icon" src="../../imgs/icon/arrow@down.png"></image>
+          </view>
+
+        </picker>
+
+      </view>
+      <view class="middle-border"></view>
+
+      <view catchtap="onAddingCartTap" class="add-cart-btn {{product.stock==0 ? 'disabled':''}}">
+        <text>加入购物车</text>
+        <image src="../../imgs/icon/cart.png" class="cart-icon"></image>
+        <image id="small-top-img" class="small-top-img {{isFly?'animate':''}}" src="{{product.main_img_url}}" mode="aspectFill" style="{{translateStyle}}"></image>
+
+
+      </view>
+    </view>
+
+    <view class="basic-info-box">
+      <view class="stock" wx:if="{{product.stock>0}}">有货</view>
+      <view class="stock no" wx:else>缺货</view>
+      <view class="name">{{product.name}}</view>
+      <view class="price">￥{{product.price}}</view>
+    </view>
+  </view>
+
+  <view class="detail-bottom-box">
+    <view class="tabs-box">
+      <block wx:for="{{tabArray}}">
+        <view class="tabs-item {{currentIndex==index ? 'selected':''}}" data-index="{{index}}" catchtap='onTabItemsTap'>
+          {{item}}
+        </view>
+      </block>
+    </view>
+    <view class="product-detail-box"></view>
+    <view class="product-detail-imgs" hidden="{{currentIndex!=0 ? true:false}}">
+      <block wx:for="{{product.imgs}}">
+        <image src="{{item.img_url.url}}" mode="aspectFill"></image>
+      </block>
+    </view>
+    <view class="product-detail-properties" hidden="{{currentIndex!=1 ? true:false}}">
+      <block wx:for="{{product.property}}">
+        <view class="properties-item">
+          <view class="properties-name">{{item.name}}</view>
+          <view class="properties-detail">{{item.detail}}</view>
+        </view>
+      </block>
+    </view>
+    <view class="product-detail-protect" hidden="{{currentIndex!=2 ? true:false}}">
+      <view>七天无理由免费退货</view>
+    </view>
+  </view>
+
+</view>
