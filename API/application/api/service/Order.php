@@ -69,6 +69,11 @@ class Order
         $order->total_count = $snap['totalCount'];
         $order->snap_items = json_encode($snap['pStatus']);
         $order->save();
+        }
+        catch (Exception $ex){
+            Db::rollback();
+            throw $ex;
+        }
         $orderId=$order->id;
         $createTime=$order->create_time;
         foreach ($this->oProducts as &$val)
@@ -82,11 +87,7 @@ class Order
             'order_no'=>$order->order_no,
             'create_time'=>$createTime,
             'order_id'=>$orderId
-        ];}
-        catch (Exception $ex){
-            Db::rollback();
-            throw $ex;
-        }
+        ];
     }
 
     public static function makeOrderNo()
